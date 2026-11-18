@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -88,19 +89,92 @@
   <div class="app-shell" id="app-shell" aria-hidden="true">
     <div class="app-backdrop" id="app-backdrop"></div>
     <section class="app-panel" role="dialog" aria-modal="true" aria-labelledby="workspace-title">
-      <header class="app-header"><a class="brand" href="#">nudge<span>.</span></a><div class="app-header-right"><span class="demo-label">LOCAL DEMO</span><button class="icon-button" id="close-app" aria-label="Close workspace">✕</button></div></header>
+      <header class="app-header">
+        <a class="brand" href="#">nudge<span>.</span></a>
+        <div class="app-header-right">
+          <span class="demo-label" id="account-label">SECURE WORKSPACE</span>
+          <button class="btn btn-outline btn-small hidden" id="sign-out">Sign out</button>
+          <button class="icon-button" id="close-app" aria-label="Close workspace">✕</button>
+        </div>
+      </header>
+
       <div class="app-content">
-        <aside class="app-sidebar"><div class="sidebar-label">WORKSPACE</div><button class="side-link active" data-view="overview">▦ <span>Overview</span></button><button class="side-link" data-view="invoices">▤ <span>Invoices</span></button><button class="side-link" data-view="clients">♙ <span>Clients</span></button><div class="sidebar-bottom"><span class="avatar">JD</span><div><strong>Your workspace</strong><small>Demo account</small></div></div></aside>
-        <div class="app-main">
-          <div class="workspace-top"><div><div class="eyebrow">YOUR MONEY, AT A GLANCE</div><h2 id="workspace-title">Overview</h2></div><button class="btn btn-primary" id="new-invoice">＋ New invoice</button></div>
-          <div id="view-overview" class="view">
-            <div class="welcome-row"><div><h3>Welcome to Nudge 👋</h3><p>Your invoice activity will show up here.</p></div><span class="date-chip" id="today-label"></span></div>
-            <div class="metric-grid"><div class="metric-card"><span>Total invoiced</span><strong id="metric-total">₹0</strong><small>All saved invoices</small></div><div class="metric-card"><span>Paid</span><strong id="metric-paid">₹0</strong><small>Marked as paid</small></div><div class="metric-card"><span>Outstanding</span><strong id="metric-outstanding">₹0</strong><small>Awaiting payment</small></div><div class="metric-card"><span>Overdue</span><strong id="metric-overdue">₹0</strong><small>Past due date</small></div></div>
-            <div class="table-card"><div class="table-heading"><div><h3>Recent invoices</h3><p>Your latest billing activity</p></div><button class="text-button" data-goto="invoices">View all →</button></div><div id="recent-table"></div></div>
-            <div class="demo-disclaimer">This is a browser-based demo. Your entries are stored only in this browser on this device.</div>
+        <!-- Authentication screen -->
+        <section id="auth-screen" class="auth-screen">
+          <div class="auth-card">
+            <div class="eyebrow">WELCOME TO NUDGE</div>
+            <h2 id="auth-title">Create your account</h2>
+            <p id="auth-description">Set up your secure workspace to manage invoices and payments.</p>
+
+            <form id="auth-form">
+              <label id="auth-name-field">Your name
+                <input id="auth-name" type="text" placeholder="Your full name" autocomplete="name">
+              </label>
+
+              <label id="auth-business-field">Business name
+                <input id="auth-business" type="text" placeholder="Your business or brand name">
+              </label>
+
+              <label>Email address
+                <input id="auth-email" type="email" placeholder="you@example.com" autocomplete="email" required>
+              </label>
+
+              <label>Password
+                <input id="auth-password" type="password" placeholder="At least 6 characters" autocomplete="current-password" minlength="6" required>
+              </label>
+
+              <p id="auth-message" class="auth-message" role="status" aria-live="polite"></p>
+
+              <button type="submit" class="btn btn-primary full-width" id="auth-submit">Create account</button>
+            </form>
+
+            <p class="auth-switch-line">
+              <span id="auth-switch-prompt">Already have an account?</span>
+              <button type="button" class="text-button" id="auth-switch">Log in</button>
+            </p>
+            <p class="auth-privacy-note">Your business data is private to your account.</p>
           </div>
-          <div id="view-invoices" class="view hidden"><div class="table-card"><div class="table-heading"><div><h3>All invoices</h3><p>Create and track your invoices</p></div><button class="btn btn-primary btn-small" id="new-invoice-2">＋ New invoice</button></div><div id="all-invoices-table"></div></div></div>
-          <div id="view-clients" class="view hidden"><div class="table-card"><div class="table-heading"><div><h3>Clients</h3><p>Clients are added when you create an invoice</p></div></div><div id="clients-list"></div></div></div>
+        </section>
+
+        <!-- Authenticated workspace -->
+        <div id="workspace-area" class="workspace-area hidden">
+          <aside class="app-sidebar">
+            <div class="sidebar-label">WORKSPACE</div>
+            <button class="side-link active" data-view="overview">▦ <span>Overview</span></button>
+            <button class="side-link" data-view="invoices">▤ <span>Invoices</span></button>
+            <button class="side-link" data-view="clients">♙ <span>Clients</span></button>
+            <div class="sidebar-bottom">
+              <span class="avatar" id="user-avatar">NU</span>
+              <div><strong id="workspace-user-name">Your workspace</strong><small id="workspace-user-email">Your account</small></div>
+            </div>
+          </aside>
+
+          <div class="app-main">
+            <div class="workspace-top">
+              <div><div class="eyebrow">YOUR MONEY, AT A GLANCE</div><h2 id="workspace-title">Overview</h2></div>
+              <button class="btn btn-primary" id="new-invoice">＋ New invoice</button>
+            </div>
+
+            <div id="view-overview" class="view">
+              <div class="welcome-row"><div><h3>Welcome to Nudge 👋</h3><p>Your invoice activity will show up here.</p></div><span class="date-chip" id="today-label"></span></div>
+              <div class="metric-grid">
+                <div class="metric-card"><span>Total invoiced</span><strong id="metric-total">₹0</strong><small>All saved invoices</small></div>
+                <div class="metric-card"><span>Paid</span><strong id="metric-paid">₹0</strong><small>Marked as paid</small></div>
+                <div class="metric-card"><span>Outstanding</span><strong id="metric-outstanding">₹0</strong><small>Awaiting payment</small></div>
+                <div class="metric-card"><span>Overdue</span><strong id="metric-overdue">₹0</strong><small>Past due date</small></div>
+              </div>
+              <div class="table-card"><div class="table-heading"><div><h3>Recent invoices</h3><p>Your latest billing activity</p></div><button class="text-button" data-goto="invoices">View all →</button></div><div id="recent-table"></div></div>
+              <div class="demo-disclaimer">Your invoices are stored securely in your Nudge account.</div>
+            </div>
+
+            <div id="view-invoices" class="view hidden">
+              <div class="table-card"><div class="table-heading"><div><h3>All invoices</h3><p>Create and track your invoices</p></div><button class="btn btn-primary btn-small" id="new-invoice-2">＋ New invoice</button></div><div id="all-invoices-table"></div></div>
+            </div>
+
+            <div id="view-clients" class="view hidden">
+              <div class="table-card"><div class="table-heading"><div><h3>Clients</h3><p>Your saved customer details</p></div></div><div id="clients-list"></div></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -132,8 +206,16 @@
     </section>
   </div>
 
-  <div class="modal-wrap hidden" id="detail-modal" aria-hidden="true"><div class="modal-backdrop" data-close-detail></div><section class="detail-modal" role="dialog" aria-modal="true"><header class="modal-header"><div><div class="eyebrow">INVOICE DETAILS</div><h2 id="detail-title">Invoice</h2></div><button class="icon-button" data-close-detail>✕</button></header><div id="detail-body"></div></section></div>
+  <div class="modal-wrap hidden" id="detail-modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-detail></div>
+    <section class="detail-modal" role="dialog" aria-modal="true">
+      <header class="modal-header"><div><div class="eyebrow">INVOICE DETAILS</div><h2 id="detail-title">Invoice</h2></div><button class="icon-button" data-close-detail>✕</button></header>
+      <div id="detail-body"></div>
+    </section>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
 </body>
 </html>
